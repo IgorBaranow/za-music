@@ -1,51 +1,15 @@
 import { ThemeProvider } from "styled-components";
-import {
-  Play,
-  SkipLeft,
-  SkipRight,
-  Pause,
-  Volume,
-  Music,
-  ArrowLeft,
-  ArrowRight,
-  Search,
-  Heart,
-  Users,
-} from "components/ui/icons";
-
-import {
-  MainTitle,
-  SectionTitle,
-  SectionSubtitle,
-  Text,
-  Subtext,
-  ButtonText,
-} from "components/ui/Typography";
 import { theme } from "styles/Theme";
+import Home from "pages/Home"; // here I do not use {}, because Home is exported default.
 import { GlobalStyles } from "styles/Global";
+import Header from "./components/Header"; // the same, with default exporting don't use {}.
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <MainTitle>Hello</MainTitle>
-      <SectionTitle>Hello</SectionTitle>
-      <SectionSubtitle>Hello</SectionSubtitle>
-      <Text>Hello</Text>
-      <Subtext>Hello</Subtext>
-      <ButtonText>Hello</ButtonText>
-      <br />
-      <Play />
-      <SkipLeft />
-      <SkipRight />
-      <Pause />
-      <Volume />
-      <Music />
-      <ArrowLeft />
-      <ArrowRight />
-      <Search />
-      <Heart />
-      <Users />
+      <Header />
+      <Home />
     </ThemeProvider>
   );
 }
