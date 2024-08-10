@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Skeleton from "react-loading-skeleton"; // library with loading components
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Wrapper, ArtistsWrapper, ArtistsSkeletonWrapper } from "./styled";
+import { Wrapper, ArtistsWrapper, ArtistsSkeletonWrapper, ArtistLoaderWrapper } from "./styled";
 import ArtistsCard from "./ArtistsCard";
 
 function Artists({ isLoading, artists }) {
@@ -12,15 +12,17 @@ function Artists({ isLoading, artists }) {
       <ArtistsWrapper>
         {/* if isLoading == true show skeleton loaders.  */}
         {isLoading &&
-          [1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-            <Skeleton
-              style={{ maxWidth: "100%" }}
-              wrapper={ArtistsSkeletonWrapper}
-              key={num}
-              height={116}
-              width={220}
-              borderRadius={25}
-            />
+          [...Array(8).keys()].map((num) => (
+            <ArtistLoaderWrapper key={num}>
+              <Skeleton
+                wrapper={ArtistsSkeletonWrapper}
+                key={num}
+                height={95}
+                width={95}
+                borderRadius={50}
+              />
+              <Skeleton height={27} />
+            </ArtistLoaderWrapper>
           ))}
         <Swiper slidesPerView="auto" spaceBetween={20} freeMode={true} modules={FreeMode}>
           {!isLoading &&

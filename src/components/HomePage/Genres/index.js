@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import Skeleton from "react-loading-skeleton"; // library with loading components
+import { toast } from "react-toastify";
 import { FreeMode } from "swiper/modules";
+import { loadGenres } from "services/api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ArrowLeft, ArrowRight } from "components/ui/Icons";
 import { SectionSubtitle } from "components/ui/Typography";
@@ -34,10 +35,15 @@ function Genres() {
 
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true); // set variable that tracks loading of an component to true, as it this moment loading starts
-      const data = await axios.get("/genre?lang=en");
-      setGenres(data.data.data.filter((genre) => genre.name.toLowerCase() !== "all")); // Updating const 'genres' by data.data.data // 3 data because the first one is my const, the second and the third one is from api to get the data. // Also I use filter here to delete the first card with "wszystkie"
-      setIsLoading(false); // loading has finished, so at the very end variable loading changes to false.
+      try {
+        setIsLoading(true); // set variable that tracks loading of an component to true, as it this moment loading starts
+        const data = await loadGenres(); //
+        setGenres(data); // Updating const 'genres' by data.data.data // 3 data because the first one is my const, the second and the third one is from api to get the data. // Also I use filter here to delete the first card with "wszystkie"
+      } catch (err) {
+        toast.error(err.message); // If error is catch call 'toast' from react-toastify
+      } finally {
+        setIsLoading(false); // loading has finished, so at the very end variable loading changes to false.
+      }
     };
     loadData();
   }, []);
@@ -58,7 +64,7 @@ function Genres() {
       <GenresWrapper>
         {/* if isLoading == true show skeleton loaders.  */}
         {isLoading &&
-          [1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+          [...Array(8).keys()].map((num) => (
             <Skeleton
               style={{ maxWidth: "100%" }}
               wrapper={GenreSkeletonWrapper}

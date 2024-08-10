@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { SectionTitle } from "components/ui/Typography";
-import axios from "axios";
+import { loadCharts } from "services/api";
 import { Hero, Genres, Artists } from "components/HomePage";
-import { ContentWrapper, GreyTitle, TrendsAndArtistsSection } from "./styled";
+import { ContentWrapper, GreyTitle, TrendsAndArtistsSection, StyledAside } from "./styled";
 
 // Import Swiper styles. I use it in genres and artists and to not double import to the 2 components it is better to import it one here.
 import "swiper/css";
@@ -14,10 +15,15 @@ function Home() {
 
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true); // set variable that tracks loading of an component to true, as it this moment loading starts
-      const data = await axios.get("/chart?lang=en");
-      setChart(data.data); // Updating const 'genres' by data.data.data // 3 data because the first one is my const, the second and the third one is from api to get the data. // Also I use filter here to delete the first card with "wszystkie"
-      setIsLoading(false); // loading has finished, so at the very end variable loading changes to false.
+      try {
+        setIsLoading(true); // set variable that tracks loading of an component to true, as it this moment loading starts
+        const data = await loadCharts(); //
+        setChart(data); // Updating const 'genres' by data.data.data // 3 data because the first one is my const, the second and the third one is from api to get the data. // Also I use filter here to delete the first card with "wszystkie"
+      } catch (err) {
+        toast.error(err.message); // If error is catch call 'toast' from react-toastify
+      } finally {
+        setIsLoading(false); // loading has finished, so at the very end variable loading changes to false.
+      }
     };
     loadData();
   }, []);
@@ -32,12 +38,12 @@ function Home() {
           <SectionTitle>Tranding right now</SectionTitle>
           <div>songs table</div>
         </div>
-        <aside>
+        <StyledAside>
           <GreyTitle>Global</GreyTitle>
           <SectionTitle>Top Artists</SectionTitle>
 
           <Artists isLoading={isLoading} artists={chart?.artists.data} />
-        </aside>
+        </StyledAside>
       </TrendsAndArtistsSection>
     </ContentWrapper>
   );
