@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { SectionTitle } from "components/ui/Typography";
 import { loadCharts } from "services/api";
+import { SectionTitle } from "components/ui/Typography";
 import { Hero, Genres, Artists } from "components/HomePage";
+import TracksTable from "components/TracksTable";
 import { ContentWrapper, GreyTitle, TrendsAndArtistsSection, StyledAside } from "./styled";
 
 // Import Swiper styles. I use it in genres and artists and to not double import to the 2 components it is better to import it one here.
@@ -36,13 +37,13 @@ function Home() {
         <div>
           <GreyTitle>Global</GreyTitle>
           <SectionTitle>Tranding right now</SectionTitle>
-          <div>songs table</div>
+          <TracksTable tracks={chart?.tracks?.data} />
         </div>
         <StyledAside>
           <GreyTitle>Global</GreyTitle>
           <SectionTitle>Top Artists</SectionTitle>
 
-          <Artists isLoading={isLoading} artists={chart?.artists.data} />
+          <Artists isLoading={isLoading} artists={chart?.artists?.data} />
         </StyledAside>
       </TrendsAndArtistsSection>
     </ContentWrapper>
