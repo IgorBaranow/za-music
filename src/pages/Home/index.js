@@ -4,11 +4,12 @@ import { loadCharts } from "services/api";
 import { SectionTitle } from "components/ui/Typography";
 import { Hero, Genres, Artists } from "components/HomePage";
 import TracksTable from "components/TracksTable";
-import { ContentWrapper, GreyTitle, TrendsAndArtistsSection, StyledAside } from "./styled";
+import { GreyTitle, TrendsAndArtistsSection, StyledAside } from "./styled";
 
 // Import Swiper styles. I use it in genres and artists and to not double import to the 2 components it is better to import it one here.
 import "swiper/css";
 import "swiper/css/free-mode";
+import { ContentWrapper } from "components/Layout";
 
 function Home() {
   const [chart, setChart] = useState(); // attach date from API to the useState component, so I can render it on the screen.

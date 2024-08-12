@@ -15,40 +15,46 @@ import {
   StyledIconButton,
   TableHeadingTime,
   Line,
+  TrackRow,
+  IconWrapper,
 } from "./styled";
-import { Heart } from "components/ui/Icons";
+import { Heart, Play } from "components/ui/Icons";
 import { formatSecondsToMSS } from "utils/time";
 
 function TracksTable({ tracks }) {
   console.log(tracks);
   return (
-    <Table>
+    <Table cellSpacing={0}>
       <TableHead>
-        <tr></tr>
-        <TableHeading>
-          <Subtext>#</Subtext>
-        </TableHeading>
-        <TableHeading>
-          <Subtext>Song name</Subtext>
-        </TableHeading>
-        <TableHeadingTime>
-          <Subtext>Time</Subtext>
-        </TableHeadingTime>
-        <TableHeading>
-          <Subtext>Album name</Subtext>
-        </TableHeading>
-        <TableHeading>
-          <Subtext>Actions</Subtext>
-        </TableHeading>
+        <tr>
+          <TableHeading first>
+            <Subtext>#</Subtext>
+          </TableHeading>
+          <TableHeading>
+            <Subtext>Song name</Subtext>
+          </TableHeading>
+          <TableHeadingTime>
+            <Subtext>Time</Subtext>
+          </TableHeadingTime>
+          <TableHeading>
+            <Subtext>Album name</Subtext>
+          </TableHeading>
+          <TableHeading>
+            <Subtext>Actions</Subtext>
+          </TableHeading>
+        </tr>
       </TableHead>
       <tbody>
         <tr>
           <Line colSpan={5} />
         </tr>
         {tracks?.map((track, index) => (
-          <tr key={track.id}>
+          <TrackRow key={track.id}>
             <TableData>
-              <SongNumberText>{String(index + 1).padStart(2, "0")}</SongNumberText>
+              <SongNumberText className="text">{String(index + 1).padStart(2, "0")}</SongNumberText>
+              <IconWrapper className="icon">
+                <Play />
+              </IconWrapper>
             </TableData>
             <TrackInfo>
               <TrackInfoImage
@@ -71,7 +77,7 @@ function TracksTable({ tracks }) {
                 <Heart />
               </StyledIconButton>
             </TableData>
-          </tr>
+          </TrackRow>
         ))}
       </tbody>
     </Table>
