@@ -1,46 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Subtext } from "components/ui/Typography";
-import {
-  SongNumberText,
-  Table,
-  TableData,
-  TableHead,
-  TableHeading,
-  TrackInfo,
-  TrackInfoImage,
-  TrackInfoTextWrapper,
-  TrackSubText,
-  TrackTitle,
-  StyledIconButton,
-  TableHeadingTime,
-  Line,
-  TrackRow,
-  IconWrapper,
-} from "./styled";
-import { Heart, Play } from "components/ui/Icons";
-import { formatSecondsToMSS } from "utils/time";
+import { Table, TableHead, TableHeading, Line, TableHeadingTime } from "./styled";
+import TrackRow from "./TrackRow";
+import Skeleton from "react-loading-skeleton";
 
-function TracksTable({ tracks }) {
-  console.log(tracks);
+function TracksTable({ tracks, isLoading }) {
   return (
     <Table cellSpacing={0}>
       <TableHead>
         <tr>
           <TableHeading first>
-            <Subtext>#</Subtext>
+            <Subtext>{isLoading ? <Skeleton /> : "#"}</Subtext>
           </TableHeading>
           <TableHeading>
-            <Subtext>Song name</Subtext>
+            <Subtext>{isLoading ? <Skeleton /> : "Song name"}</Subtext>
           </TableHeading>
           <TableHeadingTime>
-            <Subtext>Time</Subtext>
+            <Subtext>{isLoading ? <Skeleton /> : "Time"}</Subtext>
           </TableHeadingTime>
           <TableHeading>
-            <Subtext>Album name</Subtext>
+            <Subtext>{isLoading ? <Skeleton /> : "Album name"}</Subtext>
           </TableHeading>
           <TableHeading>
-            <Subtext>Actions</Subtext>
+            <Subtext>{isLoading ? <Skeleton /> : "Actions"}</Subtext>
           </TableHeading>
         </tr>
       </TableHead>
@@ -48,37 +31,9 @@ function TracksTable({ tracks }) {
         <tr>
           <Line colSpan={5} />
         </tr>
-        {tracks?.map((track, index) => (
-          <TrackRow key={track.id}>
-            <TableData>
-              <SongNumberText className="text">{String(index + 1).padStart(2, "0")}</SongNumberText>
-              <IconWrapper className="icon">
-                <Play />
-              </IconWrapper>
-            </TableData>
-            <TrackInfo>
-              <TrackInfoImage
-                src={track.album.cover}
-                alt={`${track.album.name}'s cover`}
-              ></TrackInfoImage>
-              <TrackInfoTextWrapper>
-                <TrackTitle>{track.title}</TrackTitle>
-                <TrackSubText>{track.artist.name}</TrackSubText>
-              </TrackInfoTextWrapper>
-            </TrackInfo>
-            <TableData>
-              <Subtext>{formatSecondsToMSS(track.duration)}</Subtext>
-            </TableData>
-            <TableData>
-              <TrackSubText>{track.album.title}</TrackSubText>
-            </TableData>
-            <TableData>
-              <StyledIconButton width={25} height={25}>
-                <Heart />
-              </StyledIconButton>
-            </TableData>
-          </TrackRow>
-        ))}
+        {!isLoading &&
+          tracks?.map((track, index) => <TrackRow key={track.id} track={track} index={index} />)}
+        {isLoading && [...Array(9).keys()].map((num) => <TrackRow key={num} index={num} />)}
       </tbody>
     </Table>
   );
@@ -100,6 +55,7 @@ TracksTable.propTypes = {
       }),
     }),
   ),
+  isLoading: PropTypes.bool,
 };
 
 export default TracksTable;
