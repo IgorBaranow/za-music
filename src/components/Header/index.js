@@ -7,7 +7,7 @@ import { ContentWrapper } from "components/Layout";
 function Header() {
   return (
     <Wrapper>
-      <ContentWrapper display="flex" alignItems="center" justifyContent="space-between">
+      <ContentWrapper display="flex" items="center" content="space-between">
         <LogoWrapper>
           <Logo />
           <SectionSubtitle>ZaMusic</SectionSubtitle>

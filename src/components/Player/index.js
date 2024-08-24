@@ -1,4 +1,7 @@
+import { useContext, useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
+import { actions } from "context/actions";
+import { PlayerContext, PlayerDispatchContext } from "context/playerContext";
 import {
   Wrapper,
   TrackInfoWrapper,
@@ -9,88 +12,112 @@ import {
   ProgressWrapper,
   TrackTime,
   VolumeWrapper,
+  TrackTitle,
 } from "./styled";
 import { ContentWrapper } from "components/Layout";
-import { Text } from "components/ui/Typography";
 import IconButton from "components/ui/IconButton";
-import { Play, SkipLeft, SkipRight, Volume } from "components/ui/Icons";
+import { Pause, Play, SkipLeft, SkipRight, Volume } from "components/ui/Icons";
 import { theme } from "styles/Theme";
+import { formatSecondsToMSS } from "utils/time";
 
-const track = {
-  id: 2893833601,
-  title: "Who",
-  title_short: "Who",
-  title_version: "",
-  link: "https://www.deezer.com/track/2893833601",
-  duration: 170,
-  rank: 989324,
-  explicit_lyrics: false,
-  explicit_content_lyrics: 0,
-  explicit_content_cover: 0,
-  preview: "https://cdn-preview-2.dzcdn.net/stream/c-24e0ebecbb78e1224a5b1c2568d3e331-1.mp3",
-  md5_image: "7c653cf9471ae173c46a704d7433bd68",
-  position: 1,
-  artist: {
-    id: 168047437,
-    name: "Jimin",
-    link: "https://www.deezer.com/artist/168047437",
-    picture: "https://api.deezer.com/artist/168047437/image",
-    picture_small:
-      "https://e-cdns-images.dzcdn.net/images/artist/b468c00b0d6ba7af3d95be530e1a2a08/56x56-000000-80-0-0.jpg",
-    picture_medium:
-      "https://e-cdns-images.dzcdn.net/images/artist/b468c00b0d6ba7af3d95be530e1a2a08/250x250-000000-80-0-0.jpg",
-    picture_big:
-      "https://e-cdns-images.dzcdn.net/images/artist/b468c00b0d6ba7af3d95be530e1a2a08/500x500-000000-80-0-0.jpg",
-    picture_xl:
-      "https://e-cdns-images.dzcdn.net/images/artist/b468c00b0d6ba7af3d95be530e1a2a08/1000x1000-000000-80-0-0.jpg",
-    radio: true,
-    tracklist: "https://api.deezer.com/artist/168047437/top?limit=50",
-    type: "artist",
-  },
-  album: {
-    id: 616626971,
-    title: "MUSE",
-    cover: "https://api.deezer.com/album/616626971/image",
-    cover_small:
-      "https://e-cdns-images.dzcdn.net/images/cover/7c653cf9471ae173c46a704d7433bd68/56x56-000000-80-0-0.jpg",
-    cover_medium:
-      "https://e-cdns-images.dzcdn.net/images/cover/7c653cf9471ae173c46a704d7433bd68/250x250-000000-80-0-0.jpg",
-    cover_big:
-      "https://e-cdns-images.dzcdn.net/images/cover/7c653cf9471ae173c46a704d7433bd68/500x500-000000-80-0-0.jpg",
-    cover_xl:
-      "https://e-cdns-images.dzcdn.net/images/cover/7c653cf9471ae173c46a704d7433bd68/1000x1000-000000-80-0-0.jpg",
-    md5_image: "7c653cf9471ae173c46a704d7433bd68",
-    tracklist: "https://api.deezer.com/album/616626971/tracks",
-    type: "album",
-  },
-  type: "track",
-};
+function Player() {
+  const dispatch = useContext(PlayerDispatchContext);
+  const { track, isPlaying } = useContext(PlayerContext);
+  const [playerState, setPlayerState] = useState({
+    currentTime: 0,
+    duration: 0,
+    volume: 0.3,
+  });
 
-function Player(props) {
+  const audioRef = useRef();
+
+  const togglePlay = () => dispatch({ type: actions.TOGGLE_PLAY });
+
+  const toggleVolume = () => {
+    const newVolume = playerState.volume > 0 ? 0 : 1;
+    onVolumeChange(newVolume);
+  };
+
+  const onTimeUpdate = () => {
+    if (!audioRef?.current) return;
+
+    const currentTime = audioRef.current.currentTime;
+    const duration = audioRef.current.duration;
+
+    setPlayerState((prev) => ({ ...prev, currentTime, duration }));
+  };
+
+  const onTrackTimeDrag = (newTime) => {
+    if (!audioRef?.current) return;
+
+    audioRef.current.currentTime = newTime;
+
+    setPlayerState((prev) => ({ ...prev, currentTime: newTime }));
+  };
+
+  const onVolumeChange = (newVolume) => {
+    if (!audioRef?.current) return;
+
+    audioRef.current.volume = newVolume;
+
+    setPlayerState((prev) => ({ ...prev, volume: newVolume }));
+  };
+
+  const handleNextSong = () => dispatch({ type: actions.NEXT_SONG });
+  const handlePrevSong = () => dispatch({ type: actions.PREV_SONG });
+
+  useEffect(() => {
+    if (!audioRef?.current) return;
+
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [audioRef, track, isPlaying]);
+
+  if (!track) {
+    return null;
+  }
+
   return (
     <Wrapper>
-      <ContentWrapper display="flex">
+      <ContentWrapper display="flex" items="center">
+        <audio
+          ref={audioRef}
+          src={track.preview}
+          controls
+          onTimeUpdate={onTimeUpdate}
+          onLoadedMetadata={onTimeUpdate}
+          hidden
+          onEnded={handleNextSong}
+        />
         <TrackInfoWrapper>
           <TrackImage src={track.album.cover} alt={`${track?.album.title}'s cover`} />
           <TrackInfoTextWrapper>
-            <Text>{track.title}</Text>
+            <TrackTitle>{track.title}</TrackTitle>
             <ArtistName>{track.artist.name}</ArtistName>
           </TrackInfoTextWrapper>
         </TrackInfoWrapper>
         <ControlsWrapper>
           <IconButton>
-            <SkipLeft />
+            <SkipLeft onClick={handlePrevSong} />
           </IconButton>
-          <IconButton width={55} height={55} withBackground>
-            <Play />
+          <IconButton onClick={togglePlay} width={55} height={55} withBackground>
+            {isPlaying ? <Pause /> : <Play />}
           </IconButton>
           <IconButton>
-            <SkipRight />
+            <SkipRight onClick={handleNextSong} />
           </IconButton>
         </ControlsWrapper>
         <ProgressWrapper>
-          <TrackTime>0:00</TrackTime>
+          <TrackTime>{formatSecondsToMSS(playerState.currentTime)}</TrackTime>
           <Slider
+            onChange={onTrackTimeDrag}
+            step={0.01}
+            min={0}
+            max={playerState.duration}
+            value={playerState.currentTime}
             style={{ padding: "3px 0" }}
             trackStyle={{ height: 8, backgroundColor: theme.colors.white }}
             railStyle={{ height: 8, backgroundColor: theme.colors.darkGrey }}
@@ -102,13 +129,18 @@ function Player(props) {
               marginTop: -6,
             }}
           />
-          <TrackTime>2:30</TrackTime>
+          <TrackTime>{formatSecondsToMSS(playerState.duration)}</TrackTime>
         </ProgressWrapper>
         <VolumeWrapper>
-          <IconButton height={24} width={24}>
+          <IconButton height={24} width={24} onClick={toggleVolume}>
             <Volume />
           </IconButton>
           <Slider
+            step={0.01}
+            min={0}
+            max={1}
+            value={playerState.volume}
+            onChange={onVolumeChange}
             style={{ padding: "3px 0" }}
             trackStyle={{ height: 8, backgroundColor: theme.colors.white }}
             railStyle={{ height: 8, backgroundColor: theme.colors.darkGrey }}

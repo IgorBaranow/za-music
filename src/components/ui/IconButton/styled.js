@@ -17,7 +17,7 @@ export const StyledButton = styled.button`
 
   // If props.withBackground is true I apply additional CSS. After && inside ' ' I can write css, but it will be not highlited and hard to read, so i import {css} and write code after css'...'
   ${(props) =>
-    props.withBackground &&
+    props.bg &&
     css`
       background-color: ${(props) => props.backgroundColor || props.theme.colors.lightWhite};
     `}

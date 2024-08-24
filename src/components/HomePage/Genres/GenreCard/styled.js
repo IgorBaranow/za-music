@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: url(${(props) => props.backgroundImage});
+    background-image: url(${(props) => props.image});
     background-size: cover;
     background-position: center center; // to align the image to the center of the container
     border-radius: 25px;
