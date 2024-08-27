@@ -63,7 +63,9 @@ function Player() {
     setPlayerState((prev) => ({ ...prev, volume: newVolume }));
   };
 
-  const handleNextSong = () => dispatch({ type: actions.NEXT_SONG });
+  const handleNextSong = () => {
+    dispatch({ type: actions.NEXT_SONG });
+  };
   const handlePrevSong = () => dispatch({ type: actions.PREV_SONG });
 
   useEffect(() => {

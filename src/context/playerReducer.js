@@ -22,21 +22,24 @@ export function playerReducer(state, action) {
         isPlaying: !state.isPlaying,
       };
     }
+
     case actions.NEXT_SONG: {
       if (!state.tracks || !state.track) return state;
-      const curentSongIndex = state.tracks.findIndex((track) => track.id === state.track.id);
-      const nextSongIndex = curentSongIndex === state.tracks.length - 1 ? 0 : curentSongIndex + 1;
+      const currentSongIndex = state.tracks.findIndex((track) => track.id === state.track.id);
+      const nextSongIndex = currentSongIndex === state.tracks.length - 1 ? 0 : currentSongIndex + 1;
       return {
         ...state,
+        isPlaying: true,
         track: state.tracks[nextSongIndex],
       };
     }
     case actions.PREV_SONG: {
       if (!state.tracks || !state.track) return state;
-      const curentSongIndex = state.tracks.findIndex((track) => track.id === state.track.id);
-      const prevSongIndex = curentSongIndex === 0 ? state.tracks.length - 1 : curentSongIndex - 1;
+      const currentSongIndex = state.tracks.findIndex((track) => track.id === state.track.id);
+      const prevSongIndex = currentSongIndex === 0 ? state.tracks.length - 1 : currentSongIndex - 1;
       return {
         ...state,
+        isPlaying: true,
         track: state.tracks[prevSongIndex],
       };
     }

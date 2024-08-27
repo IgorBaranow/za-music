@@ -12,7 +12,7 @@ export const StyledTrackRow = styled.tr`
     }
 
     .icon {
-      display: block;
+      display: inline-block;
     }
     background-color: ${({ theme }) => theme.colors.lightWhite};
   }
@@ -30,7 +30,7 @@ export const StyledTrackRow = styled.tr`
 `;
 
 export const TableData = styled.td`
-  padding: 10px 20px 10px 0;
+  padding: 10px 20px 10px 0px;
 `;
 
 export const TrackInfo = styled(TableData)`
