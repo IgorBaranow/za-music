@@ -1,14 +1,12 @@
-import { useReducer } from "react";
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useReducer } from "react";
 import { ThemeProvider } from "styled-components";
 import { SkeletonTheme } from "react-loading-skeleton"; // this is a library with loaders, below I wrapped all my app into this library to use it and set styles
 import { ToastContainer } from "react-toastify";
 import { initialState, playerReducer } from "context/playerReducer";
 import { PlayerContext, PlayerDispatchContext } from "context/playerContext";
+import { setStorageValue } from "services/localStorage";
 import { theme } from "styles/Theme";
-import Home from "pages/Home"; // here I do not use {}, because Home is exported default.
-import Search from "pages/Search";
-import Layout from "components/Layout";
+
 import { GlobalStyles } from "styles/Global";
 
 // Import skeleton loader css
@@ -18,11 +16,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Import rc-slider css
 import "rc-slider/assets/index.css";
-import Error from "pages/Error";
+import AppRouter from "AppRouter";
 
 function App() {
   const [state, dispatch] = useReducer(playerReducer, initialState);
-
+  useEffect(() => {
+    setStorageValue("savedTrackIds", state.savedTrackIds);
+  }, [state.savedTrackIds]);
   return (
     <PlayerContext.Provider value={state}>
       <PlayerDispatchContext.Provider value={dispatch}>
@@ -32,14 +32,7 @@ function App() {
             highlightColor={theme.colors.lightWhite}
           >
             <GlobalStyles />
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="/search" element={<Search />} />
-                {/* '*' means when non of the links are matches, then load the page with '*' */}
-                <Route path="*" element={<Error />} />
-              </Route>
-            </Routes>
+            <AppRouter />
             <ToastContainer
               position="bottom-left"
               autoClose={5000}

@@ -11,7 +11,7 @@ export const StyledInput = styled.input`
   border-radius: 25px;
   padding: 17px 54px;
   border: 2px solid ${({ theme }) => theme.colors.black};
-  background-image: url("../../../assets/search.svg");
+  background-image: ${(props) => `url(${props.icon})`};
   background-repeat: no-repeat;
   background-position: 17px 21px;
   &:focus {

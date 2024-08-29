@@ -15,6 +15,7 @@ import {
   GenresWrapper,
   GenreSkeletonWrapper,
 } from "./styled";
+import { Link } from "react-router-dom";
 
 // I can specify width and height here in props because I have props written in IconButton index.js file
 function Genres() {
@@ -84,7 +85,9 @@ function Genres() {
           {!isLoading &&
             genres?.map((genre) => (
               <SwiperSlide key={genre.id} style={{ width: "auto" }}>
-                <GenreCard name={genre.name} backgroundImage={genre.picture_medium} />
+                <Link to={`/genres/${genre.id}`}>
+                  <GenreCard name={genre.name} backgroundImage={genre.picture_medium} />
+                </Link>
               </SwiperSlide>
             ))}
         </Swiper>

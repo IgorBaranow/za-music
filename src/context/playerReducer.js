@@ -1,9 +1,11 @@
+import { getStorageValue } from "services/localStorage";
 import { actions } from "./actions";
 
 export const initialState = {
   track: null,
   tracks: [],
   isPlaying: false,
+  savedTrackIds: getStorageValue("savedTrackIds") || [],
 };
 
 export function playerReducer(state, action) {
@@ -41,6 +43,21 @@ export function playerReducer(state, action) {
         ...state,
         isPlaying: true,
         track: state.tracks[prevSongIndex],
+      };
+    }
+    case actions.TOGGLE_SAVE_TRACK: {
+      const indexOfTrack = state.savedTrackIds.indexOf(action.trackId);
+      if (indexOfTrack >= 0) {
+        const newSavedTrackIds = [...state.savedTrackIds];
+        newSavedTrackIds.splice(indexOfTrack, 1);
+        return {
+          ...state,
+          savedTrackIds: newSavedTrackIds,
+        };
+      }
+      return {
+        ...state,
+        savedTrackIds: [...state.savedTrackIds, action.trackId],
       };
     }
 

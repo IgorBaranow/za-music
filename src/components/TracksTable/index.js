@@ -1,7 +1,14 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Subtext } from "components/ui/Typography";
-import { Table, TableHead, TableHeading, Line, TableHeadingTime } from "./styled";
+import {
+  Table,
+  TableHead,
+  TableHeading,
+  Line,
+  TableHeadingTime,
+  TableHeadingHashtag,
+} from "./styled";
 import TrackRow from "./TrackRow";
 import Skeleton from "react-loading-skeleton";
 import { PlayerContext, PlayerDispatchContext } from "context/playerContext";
@@ -9,7 +16,7 @@ import { actions } from "context/actions";
 
 function TracksTable({ tracks, isLoading }) {
   const dispatch = useContext(PlayerDispatchContext);
-  const { track, isPlaying } = useContext(PlayerContext);
+  const { track, isPlaying, savedTrackIds } = useContext(PlayerContext);
 
   const handleTrackClick = (clickedTrack) => {
     if (track?.id === clickedTrack.id) {
@@ -23,12 +30,17 @@ function TracksTable({ tracks, isLoading }) {
       });
     }
   };
+
+  const handleSaveTrackClick = (trackId) => {
+    dispatch({ type: actions.TOGGLE_SAVE_TRACK, trackId });
+  };
+
   return (
     <Table cellSpacing={0}>
       <TableHead>
         <tr>
           <TableHeading first={1}>
-            <Subtext>{isLoading ? <Skeleton /> : "#"}</Subtext>
+            <TableHeadingHashtag>{isLoading ? <Skeleton /> : "#"}</TableHeadingHashtag>
           </TableHeading>
           <TableHeading>
             <Subtext>{isLoading ? <Skeleton /> : "Song name"}</Subtext>
@@ -56,6 +68,8 @@ function TracksTable({ tracks, isLoading }) {
               key={currentTrack.id}
               track={currentTrack}
               index={index}
+              handleSaveTrackClick={handleSaveTrackClick}
+              isSaved={savedTrackIds.includes(currentTrack.id)}
             />
           ))}
         {isLoading && [...Array(9).keys()].map((num) => <TrackRow key={num} index={num} />)}

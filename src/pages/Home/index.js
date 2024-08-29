@@ -19,8 +19,7 @@ function Home() {
     const loadData = async () => {
       try {
         setIsLoading(true); // set variable that tracks loading of an component to true, as it this moment loading starts
-        const chart = await loadCharts(); //
-        const radio = await loadTopRadioTracks();
+        const [chart, radio] = await Promise.all([loadCharts(), loadTopRadioTracks()]);
         setChart(chart); // Updating const 'genres' by data.data.data // 3 data because the first one is my const, the second and the third one is from api to get the data. // Also I use filter here to delete the first card with "wszystkie"
         setRadio(radio);
       } catch (err) {

@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { search } from "services/api";
 import TracksTable from "components/TracksTable";
 import Input from "components/ui/Input";
-import { SectionSubtitle, SectionTitle } from "components/ui/Typography";
 
 function Search() {
   const [isLoading, setIsLoading] = useState(false);

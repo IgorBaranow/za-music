@@ -12,7 +12,7 @@ export const StyledTrackRow = styled.tr`
     }
 
     .icon {
-      display: inline-block;
+      display: block;
     }
     background-color: ${({ theme }) => theme.colors.lightWhite};
   }
@@ -21,6 +21,7 @@ export const StyledTrackRow = styled.tr`
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     padding-left: 20px;
+    justify-content: center;
   }
 
   td:last-child {
@@ -67,6 +68,8 @@ export const TrackSubText = styled(Subtext)`
 `;
 export const SongNumberText = styled(Subtext)`
   color: ${({ theme }) => theme.colors.secondaryGrey};
+  display: flex;
+  justify-content: center;
 `;
 
 export const StyledIconButton = styled(IconButton)`
