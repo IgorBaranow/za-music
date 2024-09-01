@@ -1,4 +1,4 @@
-import { Subtext } from "components/ui/Typography";
+import { SubText } from "components/ui/Typography";
 import styled from "styled-components";
 
 export const Table = styled.table`
@@ -15,7 +15,7 @@ export const TableHeading = styled.th`
   padding: 30px 20px 30px ${(props) => (props.first ? "20px" : "0")};
 `;
 
-export const TableHeadingHashtag = styled(Subtext)`
+export const TableHeadingHashtag = styled(SubText)`
   display: flex;
   justify-content: center;
 `;

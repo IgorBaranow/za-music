@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Subtext } from "components/ui/Typography";
+import { SubText } from "components/ui/Typography";
 import {
   Table,
   TableHead,
@@ -13,8 +13,11 @@ import TrackRow from "./TrackRow";
 import Skeleton from "react-loading-skeleton";
 import { PlayerContext, PlayerDispatchContext } from "context/playerContext";
 import { actions } from "context/actions";
+import { useWindowSize } from "hooks/useWindowSize";
+import { breakpoints } from "styles/BreakPoints";
 
 function TracksTable({ tracks, isLoading }) {
+  const { width } = useWindowSize();
   const dispatch = useContext(PlayerDispatchContext);
   const { track, isPlaying, savedTrackIds } = useContext(PlayerContext);
 
@@ -43,16 +46,20 @@ function TracksTable({ tracks, isLoading }) {
             <TableHeadingHashtag>{isLoading ? <Skeleton /> : "#"}</TableHeadingHashtag>
           </TableHeading>
           <TableHeading>
-            <Subtext>{isLoading ? <Skeleton /> : "Song name"}</Subtext>
+            <SubText>{isLoading ? <Skeleton /> : "Song name"}</SubText>
           </TableHeading>
-          <TableHeadingTime>
-            <Subtext>{isLoading ? <Skeleton /> : "Time"}</Subtext>
-          </TableHeadingTime>
+          {width > breakpoints.md && (
+            <TableHeadingTime>
+              <SubText>{isLoading ? <Skeleton /> : "Time"}</SubText>
+            </TableHeadingTime>
+          )}
+          {width > breakpoints.md && (
+            <TableHeading>
+              <SubText>{isLoading ? <Skeleton /> : "Album name"}</SubText>
+            </TableHeading>
+          )}
           <TableHeading>
-            <Subtext>{isLoading ? <Skeleton /> : "Album name"}</Subtext>
-          </TableHeading>
-          <TableHeading>
-            <Subtext>{isLoading ? <Skeleton /> : "Actions"}</Subtext>
+            <SubText>{isLoading ? <Skeleton /> : "Actions"}</SubText>
           </TableHeading>
         </tr>
       </TableHead>
@@ -70,9 +77,11 @@ function TracksTable({ tracks, isLoading }) {
               index={index}
               handleSaveTrackClick={handleSaveTrackClick}
               isSaved={savedTrackIds.includes(currentTrack.id)}
+              screenWidth={width}
             />
           ))}
-        {isLoading && [...Array(9).keys()].map((num) => <TrackRow key={num} index={num} />)}
+        {isLoading &&
+          [...Array(9).keys()].map((num) => <TrackRow key={num} index={num} screenWidth={width} />)}
       </tbody>
     </Table>
   );

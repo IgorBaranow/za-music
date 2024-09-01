@@ -5,8 +5,12 @@ import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Wrapper, ArtistsWrapper, ArtistsSkeletonWrapper, ArtistLoaderWrapper } from "./styled";
 import ArtistsCard from "./ArtistsCard";
+import { useWindowSize } from "hooks/useWindowSize";
+import { breakpoints } from "styles/BreakPoints";
 
 function Artists({ isLoading, artists }) {
+  const { width } = useWindowSize;
+  const isMobileLayout = width < breakpoints.md;
   return (
     <Wrapper>
       <ArtistsWrapper>
@@ -17,11 +21,11 @@ function Artists({ isLoading, artists }) {
               <Skeleton
                 wrapper={ArtistsSkeletonWrapper}
                 key={num}
-                height={95}
-                width={95}
+                height={isMobileLayout ? 75 : 95}
+                width={isMobileLayout ? 75 : 95}
                 borderRadius={50}
               />
-              <Skeleton height={27} />
+              <Skeleton height={isMobileLayout ? 19 : 27} />
             </ArtistLoaderWrapper>
           ))}
         <Swiper slidesPerView="auto" spaceBetween={20} freeMode={true} modules={FreeMode}>

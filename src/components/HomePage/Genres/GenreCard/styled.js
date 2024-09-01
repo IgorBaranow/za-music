@@ -1,5 +1,6 @@
 import { SectionSubtitle } from "components/ui/Typography";
 import styled from "styled-components";
+import { device } from "styles/BreakPoints";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -23,6 +24,11 @@ export const Wrapper = styled.div`
     background-position: center center; // to align the image to the center of the container
     border-radius: 25px;
     opacity: 0.4;
+  }
+
+  ${device.md} {
+    width: 137px;
+    height: 95px;
   }
 `;
 

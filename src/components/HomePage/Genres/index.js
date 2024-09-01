@@ -16,9 +16,12 @@ import {
   GenreSkeletonWrapper,
 } from "./styled";
 import { Link } from "react-router-dom";
+import { breakpoints } from "styles/BreakPoints";
+import { useWindowSize } from "hooks/useWindowSize";
 
 // I can specify width and height here in props because I have props written in IconButton index.js file
 function Genres() {
+  const { width } = useWindowSize();
   const [genres, setGenres] = useState(); // attach date from API to the useState component, so I can render it on the screen.
   const [isLoading, setIsLoading] = useState(false); // this variable is for tracking when a component is loading to apply loading animation instead of an component
 
@@ -70,15 +73,15 @@ function Genres() {
               style={{ maxWidth: "100%" }}
               wrapper={GenreSkeletonWrapper}
               key={num}
-              height={116}
-              width={220}
+              height={width < breakpoints.md ? 95 : 116}
+              width={width < breakpoints.md ? 137 : 220}
               borderRadius={25}
             />
           ))}
         <Swiper
           ref={sliderRef}
           slidesPerView="auto"
-          spaceBetween={20}
+          spaceBetween={width < breakpoints.md ? 9 : 20}
           freeMode={true}
           modules={FreeMode}
         >

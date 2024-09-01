@@ -1,6 +1,7 @@
-import { PLAYER_HEIGHT } from "common/constants";
-import { Subtext, Text } from "components/ui/Typography";
+import { MOBILE_PLAYER_HEIGHT, PLAYER_HEIGHT } from "common/constants";
+import { SubText, Text } from "components/ui/Typography";
 import styled from "styled-components";
+import { device } from "styles/BreakPoints";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -12,6 +13,10 @@ export const Wrapper = styled.div`
   left: 0%;
   width: 100%;
   z-index: ${({ theme }) => theme.zIndex["30"]};
+
+  ${device.lg} {
+    height: ${MOBILE_PLAYER_HEIGHT}px;
+  }
 `;
 
 export const TrackInfoWrapper = styled.div`
@@ -43,7 +48,7 @@ export const TrackTitle = styled(Text)`
   -webkit-box-orient: vertical;
 `;
 
-export const ArtistName = styled(Subtext)`
+export const ArtistName = styled(SubText)`
   line-clamp: 1;
   display: -webkit-box;
   overflow: hidden;
@@ -65,7 +70,7 @@ export const ProgressWrapper = styled.div`
   width: 100%;
 `;
 
-export const TrackTime = styled(Subtext)`
+export const TrackTime = styled(SubText)`
   color: ${(props) => (props.grey ? props.theme.colors.secondaryGrey : "inherit")};
   margin: 0 20px;
   width: 80px;

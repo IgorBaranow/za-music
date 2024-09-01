@@ -1,6 +1,7 @@
 import IconButton from "components/ui/IconButton";
-import { Text, Subtext } from "components/ui/Typography";
+import { Text, SubText } from "components/ui/Typography";
 import styled from "styled-components";
+import { device } from "styles/BreakPoints";
 
 export const StyledTrackRow = styled.tr`
   cursor: pointer;
@@ -38,6 +39,10 @@ export const TrackInfo = styled(TableData)`
   display: flex;
   align-items: center;
   gap: 25px;
+
+  ${device.md} {
+    gap: 15px;
+  }
 `;
 
 export const TrackInfoTextWrapper = styled.div`
@@ -45,12 +50,22 @@ export const TrackInfoTextWrapper = styled.div`
   flex-direction: column;
   gap: 10px;
   padding: 10px 20px 10px 0;
+
+  ${device.md} {
+    gap: 2px;
+  }
 `;
 
 export const TrackInfoImage = styled.img`
   height: 65px;
   width: 65px;
   border-radius: 15px;
+
+  ${device.md} {
+    height: 45px;
+    width: 45px;
+    border-radius: 10px;
+  }
 `;
 export const TrackTitle = styled(Text)`
   line-clamp: 1; // With this property I define how mane lines of text I wanna have. To make this work I also have to define display property to -webkit-box
@@ -58,15 +73,25 @@ export const TrackTitle = styled(Text)`
   overflow: hidden;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+
+  ${device.md} {
+    font-size: 18px;
+    line-height: 22px;
+  }
 `;
-export const TrackSubText = styled(Subtext)`
+export const TrackSubText = styled(SubText)`
   line-clamp: 1;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+
+  ${device.md} {
+    font-size: 16px;
+    line-height: 19px;
+  }
 `;
-export const SongNumberText = styled(Subtext)`
+export const SongNumberText = styled(SubText)`
   color: ${({ theme }) => theme.colors.secondaryGrey};
   display: flex;
   justify-content: center;

@@ -14,12 +14,22 @@ import {
   StyledTrackRow,
   IconWrapper,
 } from "./styled";
-import { Subtext } from "components/ui/Typography";
+import { SubText } from "components/ui/Typography";
 import Skeleton from "react-loading-skeleton";
 import { setStorageValue } from "services/localStorage";
 import { theme } from "styles/Theme";
+import { breakpoints } from "styles/BreakPoints";
 
-function TrackRow({ track, index, onClick, isPlaying, handleSaveTrackClick, isSaved }) {
+function TrackRow({
+  track,
+  index,
+  onClick,
+  isPlaying,
+  handleSaveTrackClick,
+  isSaved,
+  screenWidth,
+}) {
+  const isMobileLlayout = screenWidth > breakpoints.md;
   return (
     <StyledTrackRow key={track?.id} onClick={() => onClick(track)}>
       <TableData>
@@ -32,21 +42,33 @@ function TrackRow({ track, index, onClick, isPlaying, handleSaveTrackClick, isSa
         {track ? (
           <TrackInfoImage src={track?.album?.cover} alt={`${track?.album?.title}'s cover`} />
         ) : (
-          <Skeleton width={65} height={65} borderRadius={15} />
+          <Skeleton
+            width={isMobileLlayout ? 65 : 45}
+            height={isMobileLlayout ? 65 : 45}
+            borderRadius={isMobileLlayout ? 15 : 10}
+          />
         )}
         <TrackInfoTextWrapper>
-          <TrackTitle>{track?.title || <Skeleton width={320} />}</TrackTitle>
-          <TrackSubText>{track?.artist?.name || <Skeleton width={250} />}</TrackSubText>
+          <TrackTitle>
+            {track?.title || <Skeleton width={isMobileLlayout ? 320 : 150} />}
+          </TrackTitle>
+          <TrackSubText>
+            {track?.artist?.name || <Skeleton width={isMobileLlayout ? 250 : 100} />}
+          </TrackSubText>
         </TrackInfoTextWrapper>
       </TrackInfo>
-      <TableData>
-        <Subtext>
-          {track?.duration ? formatSecondsToMSS(track?.duration) : <Skeleton width={48} />}
-        </Subtext>
-      </TableData>
-      <TableData>
-        <TrackSubText>{track?.album?.title || <Skeleton width={350} />}</TrackSubText>
-      </TableData>
+      {isMobileLlayout && (
+        <TableData>
+          <SubText>
+            {track?.duration ? formatSecondsToMSS(track?.duration) : <Skeleton width={48} />}
+          </SubText>
+        </TableData>
+      )}
+      {isMobileLlayout && (
+        <TableData>
+          <TrackSubText>{track?.album?.title || <Skeleton width={350} />}</TrackSubText>
+        </TableData>
+      )}
       <TableData>
         {track ? (
           <StyledIconButton
@@ -88,6 +110,7 @@ TrackRow.propTypes = {
   isPlaying: PropTypes.bool,
   handleSaveTrackClick: PropTypes.func,
   isSaved: PropTypes.bool,
+  screenWidth: PropTypes.number,
 };
 
 export default TrackRow;
