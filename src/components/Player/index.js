@@ -115,7 +115,10 @@ function Player() {
   }
 
   return (
-    <Wrapper onClick={playerState.isOpened ? null : toggleOpen} opened={playerState.isOpened}>
+    <Wrapper
+      onClick={playerState.isOpened ? null : toggleOpen}
+      opened={playerState.isOpened ? "true" : undefined}
+    >
       <audio
         ref={audioRef}
         src={track.preview}

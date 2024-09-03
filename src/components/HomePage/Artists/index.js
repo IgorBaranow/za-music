@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Skeleton from "react-loading-skeleton"; // library with loading components
-import { FreeMode } from "swiper/modules";
+import { FreeMode, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Wrapper, ArtistsWrapper, ArtistsSkeletonWrapper, ArtistLoaderWrapper } from "./styled";
 import ArtistsCard from "./ArtistsCard";
 import { useWindowSize } from "hooks/useWindowSize";
 import { breakpoints } from "styles/BreakPoints";
+import { Link } from "react-router-dom";
 
 function Artists({ isLoading, artists }) {
   const { width } = useWindowSize;
@@ -24,15 +25,24 @@ function Artists({ isLoading, artists }) {
                 height={isMobileLayout ? 75 : 95}
                 width={isMobileLayout ? 75 : 95}
                 borderRadius={50}
+                style={{ margin: "0 auto" }}
               />
               <Skeleton height={isMobileLayout ? 19 : 27} />
             </ArtistLoaderWrapper>
           ))}
-        <Swiper slidesPerView="auto" spaceBetween={20} freeMode={true} modules={FreeMode}>
+        <Swiper
+          slidesPerView="auto"
+          spaceBetween={20}
+          freeMode={true}
+          modules={[Pagination]}
+          style={{ marginLeft: 0 }}
+        >
           {!isLoading &&
-            artists?.map((genre) => (
-              <SwiperSlide key={genre.id} style={{ width: "auto" }}>
-                <ArtistsCard name={genre.name} image={genre.picture_medium} />
+            artists?.map((artist) => (
+              <SwiperSlide key={artist.id} style={{ width: "auto" }}>
+                <Link to={`/artists/${artist.id}`}>
+                  <ArtistsCard name={artist.name} image={artist.picture_medium} />
+                </Link>
               </SwiperSlide>
             ))}
         </Swiper>
