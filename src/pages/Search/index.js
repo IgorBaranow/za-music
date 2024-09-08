@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { InputWrapper, NotFoundText, TableTitle, Wrapper } from "./styled";
-import SearchIcon from "assets/search.svg";
 import { toast } from "react-toastify";
 import { search } from "services/api";
 import TracksTable from "components/TracksTable";
@@ -34,7 +33,6 @@ function Search() {
           placeholder="Search..."
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.target.value)}
-          startIcon={SearchIcon}
         />
       </InputWrapper>
       {searchQuery && (

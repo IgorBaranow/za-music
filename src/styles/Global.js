@@ -16,6 +16,7 @@ export const GlobalStyles = styled.createGlobalStyle`
     font-family: ${({ theme }) => theme.fonts.poppins}, sans-serif;
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme }) => theme.colors.black};
+    overflow-x: hidden;
   }
 
   a {
